@@ -1,16 +1,10 @@
 ; ==============================================================
-; 键盘映射工具 v4.0.2
+; 键盘映射工具 v4.2.0
 ; 功能：Win/CapsLock 切换映射模式
 ; ==============================================================
 #Requires AutoHotkey v2.0
 #SingleInstance Force
-Persistent
-InstallKeybdHook
-ProcessSetPriority "High"
 A_MenuMaskKey := "vkE8"
-Thread "Interrupt", 0
-A_HotkeyInterval := 50
-A_MaxHotkeysPerInterval := 200
 
 ; ===================== 系统初始化 =================================
 startupLink := A_Startup "\AHK.lnk"
@@ -23,13 +17,49 @@ if !FileExist(startupLink)
 *PrintScreen::Delete
 SetCapsLockState "AlwaysOff"
 
+; ===================== 注册表处理 ====================================
+RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
+ValueName := "Scancode Map"
+correctMap :=
+"00000000" .
+"00000000" .
+"03000000" .
+"5BE038E0" . ;RAlt -> LWin
+"3A005BE0" . ;LWin -> CapsLk
+"00000000"
+if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
+    RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
+}
+;;恢复注册表
+; RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
+; MsgBox("已删除所有键位映射。`n请重启电脑生效。", "注册表已恢复", "Iconi")
+
 ; ===================== CapsLock键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"
-CapsLock & e::#e
+CapsLock & a::#a
+CapsLock & b::#b
 CapsLock & d::#d
+CapsLock & e::#e
+CapsLock & f::#f
+CapsLock & g::#g
+CapsLock & h::#h
+CapsLock & i::#i
+CapsLock & j::#j
+CapsLock & k::#k
+CapsLock & m::#m
+CapsLock & n::#n
+CapsLock & o::#o
+CapsLock & p::#p
+CapsLock & q::#q
 CapsLock & r::#r
-CapsLock & x::#x
+CapsLock & s::#s
+CapsLock & t::#t
+CapsLock & u::#u
 CapsLock & v::#v
+CapsLock & w::#w
+CapsLock & x::#x
+CapsLock & y::#y
+CapsLock & z::#z
 CapsLock & 1::F1
 CapsLock & 2::F2
 CapsLock & 3::F3
@@ -51,44 +81,10 @@ CapsLock & Down::PgDn
 CapsLock & c::CapsLock
 CapsLock & Enter::^+Esc
 CapsLock & BackSpace::Delete
+CapsLock & c::CapsLock
 CapsLock & L::
-{
-    KeyWait("L")
-    KeyWait("CapsLock")
-    DllCall("LockWorkStation")
-}
-
-; ===================== Win键映射处理 ===========================
-#1::F1
-#2::F2
-#3::F3
-#4::F4
-#5::F5
-#6::F6
-#7::F7
-#8::F8
-#9::F9
-#0::F10
-#-::F11
-#=::F12
-#>!=::#=
-#>!-::#-
-#Up::PgUp
-#`::Insert
-#Left::Home
-#Right::End
-#Down::PgDn
-#Enter::^+Esc
-#c::CapsLock
-#BackSpace::Delete
-~LWin:: SendInput "{Blind}{vkE8}"
-~LWin Up::
-{
-    if (A_PriorKey = "LWin")
-        SendEvent "{Esc}"
-}
-~RAlt Up::
-{
-    if (A_PriorKey = "RAlt")
-        SendEvent "{LWin}"
-}
+    {
+        KeyWait("L")
+        KeyWait("CapsLock")
+        DllCall("LockWorkStation")
+    }
