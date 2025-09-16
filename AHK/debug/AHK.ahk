@@ -1,5 +1,5 @@
 ; ==============================================================
-; 键盘映射工具 v4.2.0
+; 键盘映射工具 v4.2.4
 ; 功能：Win/CapsLock 切换映射模式
 ; ==============================================================
 #Requires AutoHotkey v2.0
@@ -12,21 +12,21 @@ if !FileExist(startupLink)
     FileCreateShortcut(A_ScriptFullPath, startupLink)
 
 ; ===================== 常驻映射 ====================================
-*Browser_Back::F1
+*Browser_Back::Delete
 *Browser_Refresh::F2
-*PrintScreen::Delete
+*PrintScreen::F5
 SetCapsLockState "AlwaysOff"
 
 ; ===================== 注册表处理 ====================================
 RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
 ValueName := "Scancode Map"
 correctMap :=
-"00000000" .
-"00000000" .
-"03000000" .
-"5BE038E0" . ;RAlt -> LWin
-"3A005BE0" . ;LWin -> CapsLk
-"00000000"
+    "00000000" .
+    "00000000" .
+    "03000000" .
+    "5BE038E0" . ;RAlt -> LWin
+    "3A005BE0" . ;LWin -> CapsLk
+    "00000000"
 if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
     RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
 }
@@ -34,7 +34,7 @@ if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
 ; RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
 ; MsgBox("已删除所有键位映射。`n请重启电脑生效。", "注册表已恢复", "Iconi")
 
-; ===================== CapsLock键映射处理 ===========================
+; ===================== 按键键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"
 CapsLock & a::#a
 CapsLock & b::#b
@@ -72,19 +72,47 @@ CapsLock & 9::F9
 CapsLock & 0::F10
 CapsLock & -::F11
 CapsLock & =::F12
-CapsLock & Up::PgUp
-CapsLock & Tab::#Tab
+CapsLock & [::#[
+CapsLock & ]::#]
+CapsLock & \::#\
+CapsLock & `;::#`;
+CapsLock & '::#'
+CapsLock & ,::#,
+CapsLock & .::#.
+CapsLock & /::#/
 CapsLock & `::Insert
+CapsLock & Up::PgUp
 CapsLock & Left::Home
 CapsLock & Right::End
 CapsLock & Down::PgDn
-CapsLock & c::CapsLock
+CapsLock & Esc::#Esc
 CapsLock & Enter::^+Esc
 CapsLock & BackSpace::Delete
 CapsLock & c::CapsLock
 CapsLock & L::
-    {
-        KeyWait("L")
-        KeyWait("CapsLock")
-        DllCall("LockWorkStation")
+{
+    KeyWait("L")
+    KeyWait("CapsLock")
+    DllCall("LockWorkStation")
+}
+CapsLock & Tab:: {
+    if GetKeyState("Shift", "P") {
+        Send "{Ctrl Down}{Shift Down}{Tab Down}"
+        KeyWait "Tab"
+        Send "{Tab Up}{Shift Up}{Ctrl Up}"
+    } else {
+        Send "{Ctrl Down}{Tab Down}"
+        KeyWait "Tab"
+        Send "{Tab Up}{Ctrl Up}"
     }
+}
+#1::F1
+#2::F2
+#3::F3
+#4::F4
+#5::F5
+#6::F6
+#7::F7
+#8::F8
+#9::F9
+#0::F10

@@ -1,5 +1,5 @@
 ; ==============================================================
-; 键盘映射工具 v4.2.0
+; 键盘映射工具 v4.2.3
 ; 功能：Win/CapsLock 切换映射模式
 ; ==============================================================
 #Requires AutoHotkey v2.0
@@ -26,19 +26,28 @@ CapsLock & 9::F9
 CapsLock & 0::F10
 CapsLock & -::F11
 CapsLock & =::F12
-CapsLock & Up::PgUp
-CapsLock & Tab::#Tab
 CapsLock & `::Insert
+CapsLock & Up::PgUp
 CapsLock & Left::Home
 CapsLock & Right::End
 CapsLock & Down::PgDn
 CapsLock & c::CapsLock
 CapsLock & Enter::^+Esc
 CapsLock & BackSpace::Delete
-CapsLock & c::CapsLock
 CapsLock & L::
-    {
-        KeyWait("L")
-        KeyWait("CapsLock")
-        DllCall("LockWorkStation")
+{
+    KeyWait("L")
+    KeyWait("CapsLock")
+    DllCall("LockWorkStation")
+}
+CapsLock & Tab:: {
+    if GetKeyState("Shift", "P") {
+        Send "{Ctrl Down}{Shift Down}{Tab Down}"
+        KeyWait "Tab"
+        Send "{Tab Up}{Shift Up}{Ctrl Up}"
+    } else {
+        Send "{Ctrl Down}{Tab Down}"
+        KeyWait "Tab"
+        Send "{Tab Up}{Ctrl Up}"
     }
+}
