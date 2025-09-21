@@ -43,10 +43,10 @@ try {
 ; ===================== CapsLock键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"
 CapsLock & a::#a
+CapsLock & d::#d
 CapsLock & e::#e
 CapsLock & i::#i
 CapsLock & r::#r
-CapsLock & s::#s
 CapsLock & t::#t
 CapsLock & v::#v
 CapsLock & x::#x
