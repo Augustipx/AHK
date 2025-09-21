@@ -1,12 +1,17 @@
 ; ==============================================================
-; 键盘映射工具 v4.6.0
+; 键盘映射工具 v4.6.5
 ; 功能：Win/CapsLock 切换映射模式
 ; ==============================================================
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
 ; ===================== 系统初始化 =================================
-startupLink := A_Startup "\AHK.lnk"
+
+oldStartupLink := A_Startup "\AHK.lnk"
+if FileExist(oldStartupLink)
+    FileDelete(oldStartupLink)
+
+startupLink := A_Startup "\AHK_2.lnk"
 if !FileExist(startupLink)
     FileCreateShortcut(A_ScriptFullPath, startupLink)
 
@@ -17,20 +22,20 @@ if !FileExist(startupLink)
 SetCapsLockState "AlwaysOff"
 
 ; ===================== 注册表处理 ====================================
-RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
-ValueName := "Scancode Map"
-correctMap :=
-    "00000000" .
-    "00000000" .
-    "03000000" .
-    "5BE038E0" . ;RAlt -> LWin
-    "3A005BE0" . ;LWin -> CapsLk
-    "00000000"
-if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
-    RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
-}
+; RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
+; ValueName := "Scancode Map"
+; correctMap :=
+;     "00000000" .
+;     "00000000" .
+;     "03000000" .
+;     "5BE038E0" . ;RAlt -> LWin
+;     "3A005BE0" . ;LWin -> CapsLk
+;     "00000000"
+; if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
+;     RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
+; }
 ;;恢复注册表
-; RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
+RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
 ; MsgBox("已删除所有键位映射。`n请重启电脑生效。", "注册表已恢复", "Iconi")
 
 ; ===================== CapsLock键映射处理 ===========================
@@ -57,6 +62,7 @@ CapsLock & -::F11
 CapsLock & =::F12
 CapsLock & Up::PgUp
 CapsLock & `::Insert
+CapsLock & Tab::Pause
 CapsLock & Left::Home
 CapsLock & Right::End
 CapsLock & Down::PgDn
