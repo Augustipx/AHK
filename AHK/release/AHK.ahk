@@ -6,6 +6,10 @@
 #SingleInstance Force
 
 ; ===================== 系统初始化 =================================
+oldStartupLink := A_Startup "\AHK_2.lnk"
+if FileExist(oldStartupLink)
+    FileDelete(oldStartupLink)
+
 startupLink := A_Startup "\AHK.lnk"
 if !FileExist(startupLink)
     FileCreateShortcut(A_ScriptFullPath, startupLink)
@@ -36,7 +40,6 @@ CapsLock & a::#a
 CapsLock & e::#e
 CapsLock & i::#i
 CapsLock & r::#r
-CapsLock & s::#s
 CapsLock & t::#t
 CapsLock & v::#v
 CapsLock & x::#x

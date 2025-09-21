@@ -6,13 +6,13 @@
 #SingleInstance Force
 
 ; ===================== 系统初始化 =================================
-oldStartupLink := A_Startup "\AHK.lnk"
+oldStartupLink := A_Startup "\AHK_2.lnk"
 if FileExist(oldStartupLink)
     FileDelete(oldStartupLink)
 
-; startupLink := A_Startup "\AHK_2.lnk"
-; if !FileExist(startupLink)
-;     FileCreateShortcut(A_ScriptFullPath, startupLink)
+startupLink := A_Startup "\AHK.lnk"
+if !FileExist(startupLink)
+    FileCreateShortcut(A_ScriptFullPath, startupLink)
 
 ; ===================== 常驻映射 ====================================
 *Browser_Back::Delete
