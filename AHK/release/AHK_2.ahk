@@ -22,21 +22,23 @@ if !FileExist(startupLink)
 SetCapsLockState "AlwaysOff"
 
 ; ===================== 注册表处理 ====================================
-; RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
-; ValueName := "Scancode Map"
-; correctMap :=
-;     "00000000" .
-;     "00000000" .
-;     "03000000" .
-;     "5BE038E0" . ;RAlt -> LWin
-;     "3A005BE0" . ;LWin -> CapsLk
-;     "00000000"
-; if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
-;     RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
-; }
-;;恢复注册表
-RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
-; MsgBox("已删除所有键位映射。`n请重启电脑生效。", "注册表已恢复", "Iconi")
+RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
+ValueName := "Scancode Map"
+correctMap :=
+    "00000000" .
+    "00000000" .
+    "03000000" .
+    "5BE038E0" . ;RAlt -> LWin
+    "3A005BE0" . ;LWin -> CapsLk
+    "00000000"
+try {
+    currentValue := RegRead(RegKey, ValueName, "REG_BINARY")
+    if (currentValue = correctMap) {
+        RegDelete(RegKey, ValueName)
+        MsgBox("已删除键位映射。`n请重启电脑生效。", "注册表已更新", "Iconi")
+    }
+} catch {
+}
 
 ; ===================== CapsLock键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"
@@ -62,7 +64,7 @@ CapsLock & -::F11
 CapsLock & =::F12
 CapsLock & Up::PgUp
 CapsLock & `::Insert
-CapsLock & Tab::Pause
+CapsLock & Tab:: Pause
 CapsLock & Left::Home
 CapsLock & Right::End
 CapsLock & Down::PgDn

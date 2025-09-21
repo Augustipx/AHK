@@ -29,9 +29,6 @@ correctMap :=
 if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
     RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
 }
-;;恢复注册表
-; RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
-; MsgBox("已删除所有键位映射。`n请重启电脑生效。", "注册表已恢复", "Iconi")
 
 ; ===================== CapsLock键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"

@@ -6,9 +6,13 @@
 #SingleInstance Force
 
 ; ===================== 系统初始化 =================================
-startupLink := A_Startup "\AHK.lnk"
-if !FileExist(startupLink)
-    FileCreateShortcut(A_ScriptFullPath, startupLink)
+oldStartupLink := A_Startup "\AHK.lnk"
+if FileExist(oldStartupLink)
+    FileDelete(oldStartupLink)
+
+; startupLink := A_Startup "\AHK_2.lnk"
+; if !FileExist(startupLink)
+;     FileCreateShortcut(A_ScriptFullPath, startupLink)
 
 ; ===================== 常驻映射 ====================================
 *Browser_Back::Delete
@@ -29,9 +33,15 @@ correctMap :=
 if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
     RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
 }
-;;恢复注册表
-; RegDelete("HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout", "Scancode Map")
-; MsgBox("已删除所有键位映射。`n请重启电脑生效。", "注册表已恢复", "Iconi")
+;恢复注册表
+; try {
+;     currentValue := RegRead(RegKey, ValueName, "REG_BINARY")
+;     if (currentValue = correctMap) {
+;         RegDelete(RegKey, ValueName)
+;         MsgBox("已删除键位映射。`n请重启电脑生效。", "注册表已更新", "Iconi")
+;     }
+; } catch {
+; }
 
 ; ===================== CapsLock键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"
