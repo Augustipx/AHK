@@ -64,7 +64,6 @@ CapsLock & -::F11
 CapsLock & =::F12
 CapsLock & Up::PgUp
 CapsLock & `::Insert
-CapsLock & Tab:: Pause
 CapsLock & Left::Home
 CapsLock & Right::End
 CapsLock & Down::PgDn
