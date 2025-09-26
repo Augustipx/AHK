@@ -4,46 +4,19 @@
 ; ==============================================================
 #Requires AutoHotkey v2.0
 #SingleInstance Force
+A_MenuMaskKey := "vkE8"
 
 ; ===================== 系统初始化 =================================
-oldStartupLink := A_Startup "\AHK_2.lnk"
-if FileExist(oldStartupLink)
-    FileDelete(oldStartupLink)
-
 startupLink := A_Startup "\AHK.lnk"
 if !FileExist(startupLink)
     FileCreateShortcut(A_ScriptFullPath, startupLink)
 
 ; ===================== 常驻映射 ====================================
+SetCapsLockState "AlwaysOff"
 *Browser_Back::Delete
 *Browser_Refresh::F2
 *PrintScreen::F5
-SetCapsLockState "AlwaysOff"
 
-; ===================== 注册表处理 ====================================
-RegKey := "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
-ValueName := "Scancode Map"
-correctMap :=
-    "00000000" .
-    "00000000" .
-    "03000000" .
-    "5BE038E0" . ;RAlt -> LWin
-    "3A005BE0" . ;LWin -> CapsLk
-    "00000000"
-if (RegRead(RegKey, ValueName, "REG_BINARY") != correctMap) {
-    RegWrite(correctMap, "REG_BINARY", RegKey, ValueName)
-}
-;恢复注册表
-; try {
-;     currentValue := RegRead(RegKey, ValueName, "REG_BINARY")
-;     if (currentValue = correctMap) {
-;         RegDelete(RegKey, ValueName)
-;         MsgBox("已删除键位映射。`n请重启电脑生效。", "注册表已更新", "Iconi")
-;     }
-; } catch {
-; }
-
-; ===================== CapsLock键映射处理 ===========================
 CapsLock:: SendEvent "{Esc}"
 CapsLock & a::#a
 CapsLock & d::#d
@@ -73,3 +46,23 @@ CapsLock & Down::PgDn
 CapsLock & c::CapsLock
 CapsLock & Enter::^+Esc
 CapsLock & BackSpace::Delete
+
+>!1::F1
+>!2::F2
+>!3::F3
+>!4::F4
+>!5::F5
+>!6::F6
+>!7::F7
+>!8::F8
+>!9::F9
+>!0::F10
+>!-::F11
+>!=::F12
+>!`::Insert
+>!c::CapsLock
+>!Enter::^+Esc
+>!Up::PgUp
+>!Left::Home
+>!Right::End
+>!Down::PgDn
