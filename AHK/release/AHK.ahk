@@ -1,11 +1,10 @@
 ; ==============================================================
-; 键盘映射工具 v4.6.0
-; 功能：Win/CapsLock 切换映射模式
+; 键盘映射工具 v5.0.0
+; 功能：Win/CapsLock 映射
 ; ==============================================================
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 A_MenuMaskKey := "vkE8"
-
 ; ===================== 系统初始化 =================================
 startupLink := A_Startup "\AHK.lnk"
 if !FileExist(startupLink)
@@ -47,22 +46,33 @@ CapsLock & c::CapsLock
 CapsLock & Enter::^+Esc
 CapsLock & BackSpace::Delete
 
->!1::F1
->!2::F2
->!3::F3
->!4::F4
->!5::F5
->!6::F6
->!7::F7
->!8::F8
->!9::F9
->!0::F10
->!-::F11
->!=::F12
->!`::Insert
->!c::CapsLock
->!Enter::^+Esc
->!Up::PgUp
->!Left::Home
->!Right::End
->!Down::PgDn
+#1::F1
+#2::F2
+#3::F3
+#4::F4
+#5::F5
+#6::F6
+#7::F7
+#8::F8
+#9::F9
+#0::F10
+#-::F11
+#=::F12
+#Up::PgUp
+#`::Insert
+#Down::PgDn
+#Right::End
+*#Left::Home
+#Enter::^+Esc
+#c::CapsLock
+~LWin:: Send "{Blind}{vkE8}"
+~LWin Up::
+{
+    if (A_PriorKey = "LWin")
+        Send "{Esc}"
+}
+~LAlt Up::
+{
+    if (A_PriorKey = "LAlt")
+        Send "{LWin}"
+}
