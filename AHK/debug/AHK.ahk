@@ -71,8 +71,8 @@ CapsLock & BackSpace::Delete
     if (A_PriorKey = "LWin")
         Send "{Esc}"
 }
-~LAlt Up::
+~RAlt Up::
 {
-    if (A_PriorKey = "LAlt")
-        Send "{LWin}"
+    if (A_PriorKey = "RAlt")
+        SendEvent "{LWin}"
 }
