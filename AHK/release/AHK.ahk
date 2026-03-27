@@ -1,5 +1,5 @@
 ; ==============================================================
-; 键盘映射工具 v5.0.0
+; 键盘映射工具 v5.0.1
 ; 功能：Win/CapsLock 映射
 ; ==============================================================
 #Requires AutoHotkey v2.0
@@ -14,7 +14,7 @@ if !FileExist(startupLink)
 SetCapsLockState "AlwaysOff"
 *Browser_Back::Delete
 *Browser_Refresh::F2
-*PrintScreen::F5
+*PrintScreen::F11
 
 CapsLock:: SendEvent "{Esc}"
 CapsLock & a::#a
